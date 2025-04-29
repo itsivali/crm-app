@@ -1,0 +1,68 @@
+CREATE DATABASE IF NOT EXISTS crm_invoicer;
+USE crm_invoicer;
+
+-- Clients
+CREATE TABLE clients (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  name VARCHAR(255) NOT NULL,
+  company VARCHAR(255),
+  address TEXT,
+  email VARCHAR(255) NOT NULL UNIQUE,
+  phone VARCHAR(50),
+  notes TEXT,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+) ENGINE=InnoDB;
+
+-- Services
+CREATE TABLE services (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  sku VARCHAR(100) UNIQUE,
+  description TEXT NOT NULL,
+  unit_price DECIMAL(10,2) NOT NULL,
+  tax_rate DECIMAL(5,2) DEFAULT 0,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+) ENGINE=InnoDB;
+
+-- Invoices
+CREATE TABLE invoices (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  invoice_number INT NOT NULL UNIQUE,
+  client_id INT NOT NULL,
+  date_issued DATE NOT NULL,
+  date_due DATE NOT NULL,
+  status ENUM('Draft','Sent','Paid','Overdue','Cancelled') DEFAULT 'Draft',
+  tax_amount DECIMAL(10,2) DEFAULT 0,
+  discount_amount DECIMAL(10,2) DEFAULT 0,
+  total_amount DECIMAL(12,2) NOT NULL,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  FOREIGN KEY (client_id) REFERENCES clients(id) ON DELETE CASCADE
+) ENGINE=InnoDB;
+
+-- Invoice Items
+CREATE TABLE invoice_items (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  invoice_id INT NOT NULL,
+  service_id INT,
+  description_override TEXT,
+  quantity INT NOT NULL,
+  unit_price DECIMAL(10,2) NOT NULL,
+  subtotal DECIMAL(12,2) NOT NULL,
+  FOREIGN KEY (invoice_id) REFERENCES invoices(id) ON DELETE CASCADE,
+  FOREIGN KEY (service_id) REFERENCES services(id) ON DELETE SET NULL
+) ENGINE=InnoDB;
+
+-- Receipts
+CREATE TABLE receipts (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  receipt_number INT NOT NULL UNIQUE,
+  invoice_id INT NOT NULL,
+  date_paid DATE NOT NULL,
+  amount_paid DECIMAL(12,2) NOT NULL,
+  payment_method VARCHAR(100),
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  FOREIGN KEY (invoice_id) REFERENCES invoices(id) ON DELETE CASCADE
+) ENGINE=InnoDB;

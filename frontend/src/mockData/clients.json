@@ -1,0 +1,21 @@
+[
+  { 
+    "_id": "507f1f77bcf86cd799439011",
+    "name": "Alice Smith",
+    "email": "alice@acme.com",
+    "company": "Acme Corp"
+  },
+  { 
+    "_id": "507f1f77bcf86cd799439012",
+    "name": "Bob Jones",
+    "email": "bob@beta.com",
+    "company": "Beta LLC"
+  },
+
+  { 
+    "_id": "507f1f77bcf86cd799439013",
+    "name": "Charlie Brown",
+    "email": "charlie@me.com",
+    "company": "The Default"
+}
+]

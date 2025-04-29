@@ -1,0 +1,16 @@
+[
+  { 
+    "_id": "507f1f77bcf86cd799439021",
+    "sku": "SVC001", 
+    "description": "Web Design", 
+    "unit_price": 1200, 
+    "tax_rate": 15 
+  },
+  { 
+    "_id": "507f1f77bcf86cd799439022",
+    "sku": "SVC002", 
+    "description": "Consulting", 
+    "unit_price": 250, 
+    "tax_rate": 10 
+  }
+]

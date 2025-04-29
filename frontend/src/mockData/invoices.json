@@ -1,0 +1,4 @@
+[
+  { "id": 1, "invoice_number": 1, "client_id": 1, "date_issued": "2025-04-01", "date_due": "2025-04-15", "status": "Sent", "total_amount": 1380 },
+  { "id": 2, "invoice_number": 2, "client_id": 2, "date_issued": "2025-04-05", "date_due": "2025-04-20", "status": "Draft", "total_amount": 250 }
+]
