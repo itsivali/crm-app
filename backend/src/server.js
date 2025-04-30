@@ -18,7 +18,7 @@ const app = express();
 const allowedOrigins = process.env.ALLOWED_ORIGINS?.split(',') || [
     'http://localhost:3000',
     'https://crm-app-qsz1.onrender.com',
-    'https://your-netlify-app.netlify.app'
+    'https://crm-invoice-app.netlify.app'
 ];
 app.use(cors({
     origin: function (origin, callback) {
