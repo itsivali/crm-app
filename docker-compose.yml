@@ -1,0 +1,82 @@
+services:
+  frontend:
+    build: 
+      context: ./frontend
+      dockerfile: Dockerfile
+    ports:
+      - "80:80" 
+    environment:
+      - REACT_APP_API_URL=${REACT_APP_API_URL}
+      - REACT_APP_COMPANY_NAME=${REACT_APP_COMPANY_NAME}
+      - REACT_APP_CURRENCY=${REACT_APP_CURRENCY}
+      - REACT_APP_DATE_FORMAT=${REACT_APP_DATE_FORMAT}
+    depends_on:
+      - backend
+    networks:
+      - crm-app-network
+    restart: unless-stopped
+
+  backend:
+    build: 
+      context: ./backend
+      dockerfile: Dockerfile
+    expose:
+      - "4000"  
+    environment:
+      - NODE_ENV=production
+      - PORT=4000
+      - MONGODB_URI=${MONGODB_URI}
+      - JWT_SECRET=${JWT_SECRET}
+      - JWT_EXPIRE=${JWT_EXPIRE}
+      - SENDGRID_API_KEY=${SENDGRID_API_KEY}
+      - EMAIL_FROM=${EMAIL_FROM}
+      - EMAIL_FROM_NAME=${EMAIL_FROM_NAME}
+      - ALLOWED_ORIGINS=${ALLOWED_ORIGINS}
+    depends_on:
+      mongodb:
+        condition: service_healthy
+    networks:
+      - crm-app-network
+    restart: unless-stopped
+
+  mongodb:
+    image: mongo:6
+    expose:
+      - "27017" 
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=${MONGO_INITDB_ROOT_USERNAME}
+      - MONGO_INITDB_ROOT_PASSWORD=${MONGO_INITDB_ROOT_PASSWORD}
+    volumes:
+      - mongodb_data:/data/db
+    networks:
+      - crm-app-network
+    healthcheck:
+      test: echo 'db.runCommand("ping").ok' | mongosh localhost:27017/test --quiet
+      interval: 10s
+      timeout: 10s
+      retries: 5
+      start_period: 40s
+    restart: unless-stopped
+
+  nginx:
+    image: nginx:alpine
+    ports:
+      - "443:443"  # HTTPS port
+    volumes:
+      - ./nginx/conf.d:/etc/nginx/conf.d
+      - ./nginx/ssl:/etc/nginx/ssl
+      - ./nginx/www:/var/www/html
+    depends_on:
+      - frontend
+    networks:
+      - crm-app-network
+    restart: unless-stopped
+
+networks:
+  crm-app-network:
+    driver: bridge
+    name: crm-app-network
+
+volumes:
+  mongodb_data:
+    name: crm-mongodb-data
