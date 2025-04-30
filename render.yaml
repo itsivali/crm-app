@@ -1,9 +1,10 @@
 services:
   - type: web
-    runtime: node
     name: crm-app-backend
-    dockerfilePath: ./backend/Dockerfile
-    dockerContext: ./backend
+    runtime: node
+    rootDir: backend
+    dockerfilePath: Dockerfile
+    dockerContext: .
     envVars:
       - key: NODE_ENV
         value: production
