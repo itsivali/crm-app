@@ -79,11 +79,12 @@ const seedData = async () => {
         ]);
 
         console.log('Database seeded successfully');
-        process.exit(0);
+        return true; // Return instead of exiting
     } catch (error) {
         console.error('Error seeding database:', error);
-        process.exit(1);
+        throw error; // Throw instead of exiting
     }
 };
 
-seedData();
+// Export the function instead of running it directly
+module.exports = { seedData };

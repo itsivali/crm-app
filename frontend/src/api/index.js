@@ -1,7 +1,6 @@
 import axios from 'axios';
 import clientsMock from '../mockData/clients.json';
 import servicesMock from '../mockData/services.json';
-import invoicesMock from '../mockData/invoices.json';
 
 const useMocks = process.env.REACT_APP_USE_MOCKS === 'true';
 const api = axios.create({
@@ -34,11 +33,11 @@ export const updateService = (id, data) => api.put(`/services/${id}`, data);
 export const deleteService = id => api.delete(`/services/${id}`);
 
 // Invoices
-export const fetchInvoices = () => useMocks ? wrap(Promise.resolve({ data: invoicesMock })) : api.get('/invoices');
+export const fetchInvoices = () => api.get('/invoices');
 export const createInvoice = data => api.post('/invoices', data);
 export const updateInvoice = (id, data) => api.put(`/invoices/${id}`, data);
 export const deleteInvoice = id => api.delete(`/invoices/${id}`);
-export const payInvoice = id => api.post(`/invoices/${id}/pay`);
+export const payInvoice = id => api.patch(`/invoices/${id}/status`, { status: 'PAID' });
 
 // Receipts
 export const fetchReceipts = () => api.get('/receipts');

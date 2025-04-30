@@ -35,18 +35,12 @@ app.use((req, res) => {
     });
 });
 
-// Update server startup
+// Start server function
 const startServer = async () => {
     try {
         await connectDB();
         app.listen(PORT, () => {
-            console.log(`Server running at http://localhost:${PORT}`);
-            console.log('Available API routes:');
-            console.log('- GET    /api/clients');
-            console.log('- GET    /api/services');
-            console.log('- GET    /api/invoices');
-            console.log('- GET    /api/receipts');
-            console.log('- GET    /api/health');
+            console.log(`Server running on port ${PORT}`);
         });
     } catch (error) {
         console.error('Failed to start server:', error);
@@ -54,4 +48,8 @@ const startServer = async () => {
     }
 };
 
-startServer();
+if (require.main === module) {
+    startServer();
+}
+
+module.exports = { app, connectDB, startServer };

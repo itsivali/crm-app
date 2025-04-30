@@ -1,13 +1,9 @@
 const { spawn } = require('child_process');
 const path = require('path');
-const server = require('./server');
-const connectDB = require('./config/db');
+const { startServer } = require('./server');
 
 async function seedAndStart() {
     try {
-        // Connect to database
-        await connectDB();
-
         // Run seed script
         const seedProcess = spawn('node', [path.join(__dirname, 'seed.js')], {
             stdio: 'inherit'
@@ -25,10 +21,7 @@ async function seedAndStart() {
         });
 
         // Start the server
-        const port = process.env.PORT || 4000;
-        server.listen(port, () => {
-            console.log(`Server running on port ${port}`);
-        });
+        await startServer();
 
     } catch (error) {
         console.error('Error during startup:', error);

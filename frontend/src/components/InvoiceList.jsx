@@ -45,7 +45,7 @@ export default function InvoiceList({ onEdit, onAdd }) {
     const handleDelete = async (id) => {
         try {
             await deleteInvoice(id);
-            setInvoices(invoices.filter(inv => inv.id !== id));
+            setInvoices(invoices.filter(inv => inv._id !== id));
         } catch (error) {
             console.error('Failed to delete invoice:', error);
         }
@@ -55,7 +55,7 @@ export default function InvoiceList({ onEdit, onAdd }) {
         try {
             await payInvoice(id);
             setInvoices(invoices.map(inv =>
-                inv.id === id ? { ...inv, status: 'PAID' } : inv
+                inv._id === id ? { ...inv, status: 'PAID' } : inv
             ));
         } catch (error) {
             console.error('Failed to pay invoice:', error);
@@ -88,14 +88,14 @@ export default function InvoiceList({ onEdit, onAdd }) {
                 </TableHead>
                 <TableBody>
                     {invoices.map(inv => (
-                        <TableRow key={inv.id}>
+                        <TableRow key={inv._id}>
                             <TableCell>{inv.invoice_number}</TableCell>
-                            <TableCell>{inv.client_id}</TableCell>
+                            <TableCell>{inv.client.name}</TableCell>
                             <TableCell>{new Date(inv.date_issued).toLocaleDateString()}</TableCell>
                             <TableCell>{new Date(inv.date_due).toLocaleDateString()}</TableCell>
                             <TableCell>{inv.status}</TableCell>
                             <TableCell align="right">
-                                ${inv.total_amount.toFixed(2)}
+                                ${inv.total_amount?.toFixed(2)}
                             </TableCell>
                             <TableCell>
                                 <Tooltip title="Edit">
@@ -105,7 +105,7 @@ export default function InvoiceList({ onEdit, onAdd }) {
                                 </Tooltip>
                                 <Tooltip title="Delete">
                                     <IconButton
-                                        onClick={() => handleDelete(inv.id)}
+                                        onClick={() => handleDelete(inv._id)}
                                         color="error"
                                     >
                                         <Delete />
@@ -114,7 +114,7 @@ export default function InvoiceList({ onEdit, onAdd }) {
                                 {inv.status !== 'PAID' && (
                                     <Tooltip title="Mark as Paid">
                                         <IconButton
-                                            onClick={() => handlePay(inv.id)}
+                                            onClick={() => handlePay(inv._id)}
                                             color="success"
                                         >
                                             <CheckCircle />

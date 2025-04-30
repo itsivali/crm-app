@@ -4,7 +4,7 @@
   "main": "src/server.js",
   "scripts": {
     "start": "node src/server.js",
-    "dev": "NODE_ENV=development nodemon src/server.js",
+    "dev": "NODE_ENV=development nodemon src/seedAndStart.js",
     "seed": "node src/seed.js",
     "test": "jest --runInBand"
   },

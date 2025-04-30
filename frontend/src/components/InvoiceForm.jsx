@@ -100,20 +100,18 @@ export default function InvoiceForm({ invoice, onSaved, onCancel }) {
                 client_id: data.client_id,
                 date_issued: data.date_issued,
                 date_due: data.date_due,
-                items: data.items.map(item => ({
-                    service_id: item.service_id,
-                    quantity: Number(item.quantity) || 1,
-                    description_override: item.description_override
-                })),
-                notes: data.notes
+                items: data.items
+                    .filter(item => item.service_id && item.quantity) // Filter out empty items
+                    .map(item => ({
+                        service_id: item.service_id,
+                        quantity: Number(item.quantity) || 1,
+                        description_override: item.description_override || ''
+                    })),
+                notes: data.notes || ''
             };
 
-            // Remove any _id fields since MongoDB will generate them
-            delete formData._id;
-            formData.items.forEach(item => delete item._id);
-
-            if (invoice?.id) {
-                await updateInvoice(invoice.id, formData);
+            if (invoice?._id) { // Update to use _id
+                await updateInvoice(invoice._id, formData);
             } else {
                 await createInvoice(formData);
             }
