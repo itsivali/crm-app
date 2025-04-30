@@ -2,17 +2,23 @@ const mongoose = require('mongoose');
 
 const connectDB = async () => {
     try {
-        const conn = await mongoose.connect(process.env.MONGODB_URI, {
+        const options = {
             useNewUrlParser: true,
             useUnifiedTopology: true,
             serverSelectionTimeoutMS: 5000,
             retryWrites: true,
-            w: 'majority',
-            ssl: true,
-            authSource: 'admin'
-        });
+            w: 'majority'
+        };
 
-        console.log('Connected to MongoDB Atlas');
+        // Add SSL and authSource only in production
+        if (process.env.NODE_ENV === 'production') {
+            options.ssl = true;
+            options.authSource = 'admin';
+        }
+
+        const conn = await mongoose.connect(process.env.MONGODB_URI, options);
+
+        console.log(`Connected to MongoDB in ${process.env.NODE_ENV} mode`);
 
         mongoose.connection.on('error', err => {
             console.error('MongoDB error:', err);

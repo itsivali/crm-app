@@ -3,8 +3,8 @@
   "version": "1.0.0",
   "main": "src/server.js",
   "scripts": {
-    "start": "node src/seedAndStart.js",
-    "dev": "nodemon src/server.js",
+    "start": "node src/server.js",
+    "dev": "NODE_ENV=development node -r dotenv/config src/server.js dotenv_config_path=.env.development",
     "seed": "node src/seed.js",
     "test": "jest --runInBand"
   },

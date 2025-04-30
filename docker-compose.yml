@@ -1,15 +1,16 @@
 services:
   frontend:
+    image: itsivali/crm-app-frontend:latest
     build: 
       context: ./frontend
       dockerfile: Dockerfile
     ports:
       - "80:80" 
     environment:
-      - REACT_APP_API_URL=${REACT_APP_API_URL}
-      - REACT_APP_COMPANY_NAME=${REACT_APP_COMPANY_NAME}
-      - REACT_APP_CURRENCY=${REACT_APP_CURRENCY}
-      - REACT_APP_DATE_FORMAT=${REACT_APP_DATE_FORMAT}
+      - REACT_APP_API_URL=${REACT_APP_API_URL:-http://localhost:4000/api}
+      - REACT_APP_COMPANY_NAME=${REACT_APP_COMPANY_NAME:-CRM Invoicer}
+      - REACT_APP_CURRENCY=${REACT_APP_CURRENCY:-USD}
+      - REACT_APP_DATE_FORMAT=${REACT_APP_DATE_FORMAT:-MM/DD/YYYY}
     depends_on:
       - backend
     networks:
@@ -17,6 +18,7 @@ services:
     restart: unless-stopped
 
   backend:
+    image: itsivali/crm-app-backend:latest
     build: 
       context: ./backend
       dockerfile: Dockerfile
@@ -26,12 +28,12 @@ services:
       - NODE_ENV=production
       - PORT=4000
       - MONGODB_URI=${MONGODB_URI}
-      - JWT_SECRET=${JWT_SECRET}
-      - JWT_EXPIRE=${JWT_EXPIRE}
+      - JWT_SECRET=${JWT_SECRET:-changeme}
+      - JWT_EXPIRE=${JWT_EXPIRE:-24h}
       - SENDGRID_API_KEY=${SENDGRID_API_KEY}
       - EMAIL_FROM=${EMAIL_FROM}
       - EMAIL_FROM_NAME=${EMAIL_FROM_NAME}
-      - ALLOWED_ORIGINS=${ALLOWED_ORIGINS}
+      - ALLOWED_ORIGINS=${ALLOWED_ORIGINS:-*}
     depends_on:
       mongodb:
         condition: service_healthy
@@ -58,6 +60,15 @@ services:
       start_period: 40s
     restart: unless-stopped
 
+  mongodb-dev:
+    image: mongo:6
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongodb_dev_data:/data/db
+    networks:
+      - crm-app-network
+
   nginx:
     image: nginx:alpine
     ports:
@@ -80,3 +91,5 @@ networks:
 volumes:
   mongodb_data:
     name: crm-mongodb-data
+  mongodb_dev_data:
+    name: crm-mongodb-dev-data
