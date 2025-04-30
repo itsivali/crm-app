@@ -2,13 +2,15 @@ const mongoose = require('mongoose');
 
 const connectDB = async () => {
     try {
-        const conn = await mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost:27017/crm-app', {
+        const conn = await mongoose.connect(process.env.MONGODB_URI, {
             useNewUrlParser: true,
-            useUnifiedTopology: true
+            useUnifiedTopology: true,
+            serverSelectionTimeoutMS: 5000,
+            retryWrites: true,
+            w: 'majority'
         });
         console.log('Connected to MongoDB');
 
-        // Set up error handler for after initial connection
         mongoose.connection.on('error', err => {
             console.error('MongoDB error:', err);
         });
