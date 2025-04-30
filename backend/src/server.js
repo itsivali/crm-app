@@ -15,23 +15,28 @@ const healthRouter = require('./routes/health');
 const app = express();
 
 // Configure CORS
-const allowedOrigins = process.env.ALLOWED_ORIGINS?.split(',') || [
+const allowedOrigins = [
     'http://localhost:3000',
     'https://crm-app-qsz1.onrender.com',
-    'https://crm-invoice-app.netlify.app'
+    'https://crm-invoice-app.netlify.app'  
 ];
+
 app.use(cors({
     origin: function (origin, callback) {
         // Allow requests with no origin (like mobile apps or curl requests)
         if (!origin) return callback(null, true);
 
+        console.log('Request origin:', origin); // Debug logging
+
         if (allowedOrigins.indexOf(origin) === -1) {
-            return callback(new Error('CORS policy violation'), false);
+            const msg = 'The CORS policy for this site does not allow access from the specified Origin.';
+            console.log('CORS error for origin:', origin); // Debug logging
+            return callback(new Error(msg), false);
         }
         return callback(null, true);
     },
     credentials: true,
-    methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH'],
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
     allowedHeaders: ['Content-Type', 'Authorization']
 }));
 
