@@ -7,9 +7,12 @@ const connectDB = async () => {
             useUnifiedTopology: true,
             serverSelectionTimeoutMS: 5000,
             retryWrites: true,
-            w: 'majority'
+            w: 'majority',
+            ssl: true,
+            authSource: 'admin'
         });
-        console.log('Connected to MongoDB');
+
+        console.log('Connected to MongoDB Atlas');
 
         mongoose.connection.on('error', err => {
             console.error('MongoDB error:', err);

@@ -15,7 +15,11 @@ const healthRouter = require('./routes/health');
 const app = express();
 
 // Configure CORS
-const allowedOrigins = process.env.ALLOWED_ORIGINS?.split(',') || ['http://localhost:3000'];
+const allowedOrigins = process.env.ALLOWED_ORIGINS?.split(',') || [
+    'http://localhost:3000',
+    'https://crm-app-qsz1.onrender.com',
+    'https://your-netlify-app.netlify.app'
+];
 app.use(cors({
     origin: function (origin, callback) {
         // Allow requests with no origin (like mobile apps or curl requests)
