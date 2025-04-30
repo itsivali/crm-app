@@ -2,18 +2,27 @@ const sgMail = require('@sendgrid/mail');
 
 sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 
-async function sendMail({ to, subject, html, attachments = [] }) {
+const sendMail = async (options) => {
+    if (process.env.NODE_ENV === 'development') {
+        console.log('Development mode - Email would have been sent:', {
+            to: options.to,
+            subject: options.subject,
+            hasAttachment: !!options.attachments
+        });
+        return;
+    }
+
     try {
         const msg = {
-            to,
+            to: options.to,
             from: process.env.FROM_EMAIL || 'itsivali@outlook.com',
-            subject,
-            html,
-            attachments
+            subject: options.subject,
+            html: options.html,
+            attachments: options.attachments || []
         };
 
         await sgMail.send(msg);
-        console.log(`Email sent successfully to ${to}`);
+        console.log(`Email sent successfully to ${options.to}`);
     } catch (error) {
         console.error('Error sending email:', error);
         if (error.response) {
@@ -21,6 +30,6 @@ async function sendMail({ to, subject, html, attachments = [] }) {
         }
         throw error;
     }
-}
+};
 
 module.exports = sendMail;

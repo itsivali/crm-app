@@ -68,6 +68,15 @@ services:
       - mongodb_dev_data:/data/db
     networks:
       - crm-app-network
+    environment:
+      - MONGODB_AUTH=false
+    command: mongod --noauth --bind_ip 0.0.0.0
+    healthcheck:
+      test: echo 'db.runCommand("ping").ok' | mongosh localhost:27017/test --quiet
+      interval: 10s
+      timeout: 10s
+      retries: 5
+      start_period: 40s
 
   nginx:
     image: nginx:alpine

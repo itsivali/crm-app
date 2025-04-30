@@ -17,8 +17,7 @@ const connectDB = async () => {
         }
 
         const conn = await mongoose.connect(process.env.MONGODB_URI, options);
-
-        console.log(`Connected to MongoDB in ${process.env.NODE_ENV} mode`);
+        console.log(`Connected to MongoDB in ${process.env.NODE_ENV} mode at ${process.env.MONGODB_URI}`);
 
         mongoose.connection.on('error', err => {
             console.error('MongoDB error:', err);
@@ -27,6 +26,8 @@ const connectDB = async () => {
         return conn;
     } catch (error) {
         console.error('MongoDB connection error:', error);
+        console.error('Current environment:', process.env.NODE_ENV);
+        console.error('MongoDB URI:', process.env.MONGODB_URI);
         process.exit(1);
     }
 };

@@ -4,7 +4,7 @@
   "main": "src/server.js",
   "scripts": {
     "start": "node src/server.js",
-    "dev": "NODE_ENV=development node -r dotenv/config src/server.js dotenv_config_path=.env.development",
+    "dev": "NODE_ENV=development nodemon src/server.js",
     "seed": "node src/seed.js",
     "test": "jest --runInBand"
   },
@@ -22,7 +22,7 @@
   },
   "devDependencies": {
     "jest": "^29.5.0",
-    "nodemon": "^2.0.22",
+    "nodemon": "^2.0.15",
     "supertest": "^7.1.0"
   },
   "overrides": {
