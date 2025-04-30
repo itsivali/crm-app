@@ -9,6 +9,7 @@ const clientRoutes = require('./routes/clients');
 const serviceRoutes = require('./routes/services');
 const invoiceRoutes = require('./routes/invoices');
 const receiptRoutes = require('./routes/receipts');
+const healthRouter = require('./routes/health');
 
 // Initialize express app
 const app = express();
@@ -40,6 +41,7 @@ app.use('/api/clients', clientRoutes);
 app.use('/api/services', serviceRoutes);
 app.use('/api/invoices', invoiceRoutes);
 app.use('/api/receipts', receiptRoutes);
+app.use('/api', healthRouter);
 
 // Connect to database before starting server
 connectDB();

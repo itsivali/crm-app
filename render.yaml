@@ -1,9 +1,9 @@
 services:
   - type: web
-    runtime: node
     name: crm-app-backend
-    buildCommand: cd backend && npm install
-    startCommand: cd backend && npm start
+    env: docker
+    dockerfilePath: ./backend/Dockerfile
+    dockerContext: ./backend
     envVars:
       - key: NODE_ENV
         value: production
@@ -19,3 +19,5 @@ services:
         sync: false
       - key: ALLOWED_ORIGINS
         value: https://itsivali.github.io
+    healthCheckPath: /api/health
+    autoDeploy: true

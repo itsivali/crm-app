@@ -1,7 +1,15 @@
-FROM node:18.17.1-alpine3.16@sha256:7a723a532e5342b845d273f482838d7b9d8946a500e0f7431d2f0b9cc0a1e2c1
+FROM node:18-alpine
 WORKDIR /app
+
+# Copy package files first for better caching
 COPY package*.json ./
-RUN npm install
+RUN npm ci --only=production
+
+# Copy application code
 COPY . .
+
+# Set production environment
+ENV NODE_ENV=production
+
 EXPOSE 4000
 CMD ["npm", "start"]
