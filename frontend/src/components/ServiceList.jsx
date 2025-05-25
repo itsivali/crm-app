@@ -9,6 +9,7 @@ import {
     Paper
 } from '@mui/material';
 import { fetchServices, deleteService } from '../api';
+import AddBusinessIcon from '@mui/icons-material/AddBusiness';
 
 export default function ServiceList({ onEdit, onAdd }) {
     const [items, setItems] = useState([]);
@@ -28,7 +29,12 @@ export default function ServiceList({ onEdit, onAdd }) {
                 variant="contained"
                 color="primary"
                 onClick={onAdd}
-                sx={{ m: 2 }}
+                startIcon={<AddBusinessIcon />}
+                sx={{
+                    background: theme => `linear-gradient(45deg, ${theme.palette.primary.main} 30%, ${theme.palette.primary.dark} 90%)`,
+                    boxShadow: '0 3px 5px 2px rgba(33, 150, 243, .3)',
+                    m: 2
+                }}
             >
                 Add Service
             </Button>

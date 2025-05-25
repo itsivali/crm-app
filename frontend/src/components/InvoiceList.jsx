@@ -11,6 +11,7 @@ import {
     Tooltip
 } from '@mui/material';
 import { Edit, Delete, CheckCircle } from '@mui/icons-material';
+import ReceiptIcon from '@mui/icons-material/Receipt';
 import { fetchInvoices, deleteInvoice, payInvoice } from '../api';
 
 export default function InvoiceList({ onEdit, onAdd }) {
@@ -70,7 +71,12 @@ export default function InvoiceList({ onEdit, onAdd }) {
                 variant="contained"
                 color="primary"
                 onClick={onAdd}
-                sx={{ m: 2 }}
+                startIcon={<ReceiptIcon />}
+                sx={{
+                    background: theme => `linear-gradient(45deg, ${theme.palette.primary.main} 30%, ${theme.palette.primary.dark} 90%)`,
+                    boxShadow: '0 3px 5px 2px rgba(33, 150, 243, .3)',
+                    m: 2
+                }}
             >
                 Add Invoice
             </Button>

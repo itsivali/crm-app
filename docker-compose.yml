@@ -7,7 +7,7 @@ services:
     ports:
       - "80:80" 
     environment:
-      - REACT_APP_API_URL=${REACT_APP_API_URL:-http://localhost:4000/api}
+      - REACT_APP_API_URL=https://crm-app-qsz1.onrender.com/api
       - REACT_APP_COMPANY_NAME=${REACT_APP_COMPANY_NAME:-CRM Invoicer}
       - REACT_APP_CURRENCY=${REACT_APP_CURRENCY:-USD}
       - REACT_APP_DATE_FORMAT=${REACT_APP_DATE_FORMAT:-MM/DD/YYYY}
