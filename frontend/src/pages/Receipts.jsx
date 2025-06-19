@@ -1,6 +1,7 @@
 import React from 'react';
 import ReceiptList from '../components/ReceiptList';
 
+
 function Receipts() {
     return (
         <div className="container mx-auto p-4">
